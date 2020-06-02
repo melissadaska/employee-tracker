@@ -10,15 +10,13 @@ function runSearch() {
         type: 'list',
         name: 'action',
         message: 'What would you like to do?',
-        choices: ['View All Employees', 
-            'View All Departments',
-            'View All Managers',
-            'Add Employee',
+        choices: ['View All Departments', 
+            'View All Roles',
+            'View All Employees',
             'Add Department',
             'Add Role',
-            'Remove Employee',
+            'Add Employee',
             'Update Employee Role',
-            'Update Employee Mangaer'
         ]
     })
     // add switch statements based on what user selects
