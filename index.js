@@ -61,10 +61,96 @@ function viewEmployees() {
 }
 
 // add function to add department
+function addDepartment() {
+    inquirer
+    .prompt({
+        type: 'input',
+        message: 'Enter Department Name',
+        name: 'department'
+    })
+    .then(function(answer) {
+        connection.query(
+            'INSERT INTO department SET ?',
+            {name: answer.department},
+            function(err, answer) {
+                if (err) {
+                    throw err;
+                }
+            }
+        ),
+        console.table(answer);
+        runSearch();
+    })
+}
 
 // add function to add role
+function addRole() {
+    inquirer
+    .prompt([
+    {
+        type: 'input',
+        message: 'Enter employee role',
+        name: 'addrole'
+    },
+    {
+        type: 'input',
+        message: 'Enter employee salary',
+        name: 'addsalary'
+    },
+    {
+        type: 'input',
+        message: 'Enter employee department id',
+        name: 'addDeptId'
+    }
+    ])
+    .then(function(answer) {
+        connection.query(
+            'INSERT INTO role SET ?',
+            {
+                title: answer.addrole,
+                salary: answer.addsalary,
+                department_id: answer.addDeptId
+            }
+        ),
+        console.log(answer);
+        runSearch();
+    })
+}
 
 // add function to add employee
+function addEmployee() {
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            message: 'Enter employee first name',
+            name: 'firstname'
+        },
+        {
+            type: 'input',
+            message: 'Enter employee last name',
+            name: 'lastname'
+        }
+    ])
+    .then(function(answer) {
+        connection.query(
+            'INSERT INTO employee SET?',
+            {
+                first_name: answer.firstname,
+                last_name: answer.lastname,
+                role_id: null,
+                manager_id: null
+            },
+            function(err, answer) {
+                if (err) {
+                    throw err;
+                }
+                console.table(answer);
+            }
+        );
+        runSearch();
+    });
+}
 
 // add function to update an employee role
 
