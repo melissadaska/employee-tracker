@@ -1,13 +1,13 @@
 var inquirer = require('inquirer');
 var consoleTable = require('console.table');
-var mysql = require('mysql');
+var mysql = require('mysql2');
 
 // add connection
 var connection = mysql.createConnection({
     host: 'localhost',
-    port: '3001',
+    port: '3306',
     user: 'root',
-    password: 'root',
+    password: 'UTbootcampcorona19',
     database: 'employees_db'
 });
 
@@ -27,9 +27,41 @@ function runSearch() {
         ]
     })
     // add switch statements based on what user selects
+    .then(function (answer) {
+        console.log(answer.action);
+        switch (answer.action) {
+          case "View All Departments":
+            viewDepartments();
+            break;
+  
+          case "View All Roles":
+            viewRoles();
+            break;
+  
+          case "View All Employees":
+            viewEmployees();
+            break;
+  
+          case "Add Department":
+            addDepartment();
+            break;
+  
+          case "Add Role":
+            addRole();
+            break;
+  
+          case "Add Employee":
+            addEmployee();
+            break;
+  
+          case "Update Employee Role":
+            updateEmployee();
+            break;
+        }
+      });
 }
 
-// call runSearch()
+runSearch();
 
 
 // add function to view all departments
@@ -43,7 +75,7 @@ function viewDepartments() {
 
 // add function to view all roles
 function viewRoles() {
-    connection.query('SELECT * FROM role', function (err, results) {
+    connection.query('SELECT * FROM roles', function (err, results) {
         console.table(results);
         if (err) throw err;
     });
@@ -52,7 +84,7 @@ function viewRoles() {
 
 // add function to view all employees
 function viewEmployees() {
-    var query = 'SELECT employee.id, employee.first_name, role.title, department.department_name AS department, role.salary FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id';
+    var query = 'SELECT employee.id, employee.first_name, roles.title, department.name AS department, roles.salary FROM employee LEFT JOIN roles on employee.roles_id = roles.id LEFT JOIN department on roles.department_id = department.id';
     connection.query(query, function(err, results) {
         console.table(results);
         if (err) throw err;
