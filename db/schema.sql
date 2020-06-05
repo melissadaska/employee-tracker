@@ -21,6 +21,5 @@ CREATE TABLE employee (
     last_name VARCHAR(30) NOT NULL,
     roles_id INT,
     manager_id INT,
-    FOREIGN KEY (manager_id) REFERENCES employee(id),
     FOREIGN KEY (roles_id) REFERENCES roles(id)
 );
