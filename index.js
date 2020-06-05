@@ -122,7 +122,7 @@ function addRole() {
     {
         type: 'input',
         message: 'Enter employee role',
-        name: 'addrole'
+        name: 'addroles'
     },
     {
         type: 'input',
@@ -137,9 +137,9 @@ function addRole() {
     ])
     .then(function(answer) {
         connection.query(
-            'INSERT INTO role SET ?',
+            'INSERT INTO roles SET ?',
             {
-                title: answer.addrole,
+                title: answer.addroles,
                 salary: answer.addsalary,
                 department_id: answer.addDeptId
             }
@@ -170,7 +170,7 @@ function addEmployee() {
             {
                 first_name: answer.firstname,
                 last_name: answer.lastname,
-                role_id: null,
+                roles_id: null,
                 manager_id: null
             },
             function(err, answer) {
@@ -185,6 +185,37 @@ function addEmployee() {
 }
 
 // add function to update an employee role
+function updateEmployee() {
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            message: 'Which employee would you like to update?',
+            name: 'eUpdate'
+        },
+        {
+            type: 'input',
+            message: 'What role would you like to change employee to?',
+            name: 'updateRole'
+        }
+    ])
+    .then(function(answer) {
+        connection.query(
+            'UPDATE employee SET roles_id=? WHERE first_name=?',
+            {
+            roles_id: answer.updateRole, 
+            first_name: answer.eUpdate 
+            },
+            function(err, answer) {
+                if (err) {
+                    throw err;
+                 }
+            console.table(answer);
+            }
+        );
+        runSearch();
+    });
+}
 
 
 
