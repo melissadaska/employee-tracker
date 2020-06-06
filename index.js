@@ -24,6 +24,8 @@ function runSearch() {
             'Add Role',
             'Add Employee',
             'Update Employee Role',
+            new inquirer.Separator()
+            // add new line after questions
         ]
     })
     // add switch statements based on what user selects
@@ -67,6 +69,7 @@ runSearch();
 // add function to view all departments
 function viewDepartments() {
     connection.query('SELECT * FROM department', function (err, results) {
+        console.log("");
         console.table(results);
         if (err) throw err;
     });   
@@ -75,7 +78,8 @@ function viewDepartments() {
 
 // add function to view all roles
 function viewRoles() {
-    connection.query('SELECT * FROM roles', function (err, results) {
+    connection.query('SELECT * FROM roles', function(err, results) {
+        console.log("");
         console.table(results);
         if (err) throw err;
     });
@@ -84,8 +88,9 @@ function viewRoles() {
 
 // add function to view all employees
 function viewEmployees() {
-    var query = 'SELECT employee.id, employee.first_name, roles.title, department.name AS department, roles.salary FROM employee LEFT JOIN roles on employee.roles_id = roles.id LEFT JOIN department on roles.department_id = department.id';
+    var query = 'SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, roles.title, department.name AS department, roles.salary FROM employee LEFT JOIN roles on employee.roles_id = roles.id LEFT JOIN department on roles.department_id = department.id';
     connection.query(query, function(err, results) {
+        console.log("");
         console.table(results);
         if (err) throw err;
     });
@@ -110,6 +115,7 @@ function addDepartment() {
                 }
             }
         ),
+        console.log("");
         console.table(answer);
         runSearch();
     })
@@ -144,6 +150,7 @@ function addRole() {
                 department_id: answer.addDeptId
             }
         ),
+        console.log("");
         console.log(answer);
         runSearch();
     })
@@ -162,21 +169,32 @@ function addEmployee() {
             type: 'input',
             message: 'Enter employee last name',
             name: 'lastname'
+        },
+        {
+            type: 'input',
+            message: 'What is the employees role id',
+            name: 'rolesID'
+        },
+        {
+            type: 'input',
+            message: 'What is the employees manager id',
+            name: 'managerID'
         }
     ])
     .then(function(answer) {
         connection.query(
-            'INSERT INTO employee SET?',
+            'INSERT INTO employee SET ?',
             {
                 first_name: answer.firstname,
                 last_name: answer.lastname,
-                roles_id: null,
-                manager_id: null
+                roles_id: answer.rolesID,
+                manager_id: answer.managerID
             },
             function(err, answer) {
                 if (err) {
                     throw err;
                 }
+                console.log("");
                 console.table(answer);
             }
         );
@@ -184,39 +202,35 @@ function addEmployee() {
     });
 }
 
-// add function to update an employee role
 function updateEmployee() {
     inquirer
-    .prompt([
-        {
-            type: 'input',
-            message: 'Which employee would you like to update?',
-            name: 'eUpdate'
-        },
-        {
-            type: 'input',
-            message: 'What role would you like to change employee to?',
-            name: 'updateRole'
-        }
-    ])
-    .then(function(answer) {
-        connection.query(
-            'UPDATE employee SET roles_id=? WHERE first_name=?',
-            {
-            roles_id: answer.updateRole, 
-            first_name: answer.eUpdate 
-            },
-            function(err, answer) {
-                if (err) {
-                    throw err;
-                 }
-            console.table(answer);
-            }
-        );
-        runSearch();
-    });
-}
-
+      .prompt({
+        name: "id",
+        type: "input",
+        message: "Enter employee id",
+      })
+      .then(function (answer) {
+        var id = answer.id;
+  
+        inquirer
+          .prompt({
+            name: "roleId",
+            type: "input",
+            message: "Enter role id",
+          })
+          .then(function (answer) {
+            var roleId = answer.roleId;
+  
+            var query = "UPDATE employee SET roles_id=? WHERE id=?";
+            connection.query(query, [roleId, id], function (err, res) {
+              if (err) {
+                console.log(err);
+              }
+              runSearch();
+            });
+          });
+      });
+  }
 
 
 
