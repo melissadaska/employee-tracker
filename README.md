@@ -1,6 +1,6 @@
 # Employee Tracker
 
-Follow this link that demonstrates the functionality of the Employee Tracker! [Employee Tracker Walkthrough Video]()
+Follow this link that demonstrates the functionality of the Employee Tracker! [Employee Tracker Walkthrough Video](https://drive.google.com/file/d/19d89P3Onuj2VXf4vuyCyNDNKiYzFG70L/view)
 
   ## Table of Contents
   
